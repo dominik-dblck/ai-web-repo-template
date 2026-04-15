@@ -2,6 +2,28 @@ You are performing an ARCHITECTURE REVIEW for this project (Next.js App Router).
 
 Focus on architecture consistency, component boundaries, data flow, and framework standards.
 
+## MANDATORY FIRST ACTION — CREATE TASKS NOW
+
+Before reading ANYTHING below, create these tasks using TaskCreate:
+
+1. "Classify layers touched by PR"
+2. "Load relevant pattern files (ONLY touched layers)"
+3. "Load relevant knowledge base sections (where applicable)"
+4. "Review code against loaded patterns"
+5. "Validate types against types-eval.md"
+6. "Validate tests against tests-eval.md"
+7. "Check cross-cutting smells"
+8. "Write findings with citations"
+9. "Present architecture summary + findings"
+
+If TaskCreate is unavailable, write the task list as a markdown checklist in your first message instead.
+
+If you have not created tasks, STOP. Go back and create them.
+
+Mark each task `in_progress` when you begin it. Mark it `completed` when done.
+
+---
+
 Scope:
 
 - Review ONLY the current branch changes versus `main` branch
@@ -75,7 +97,16 @@ Which layers does this PR affect?
 
 Always load `docs/repo-structure.md` — it applies to every review.
 
-### 0c. Identify context gaps
+### 0c. Load relevant knowledge base sections
+
+Where applicable to the PR's scope, load relevant sections from the knowledge base:
+
+- `knowladge/ai/mindmaps/` — concise mind maps covering architecture patterns, AI tooling, and best practices
+- `knowladge/ai/original_source/` — full source articles for deeper context
+
+Only load knowledge base content that is directly relevant to the layers and patterns touched by the PR. Do not load speculatively.
+
+### 0d. Identify context gaps
 
 Before reviewing, ask: **"What do I NOT know about this PR that I should know to avoid a wrong finding?"**
 
@@ -109,6 +140,24 @@ Flag if you see:
 
 ---
 
+# STEP 2 — Validate Types
+
+If the PR introduces or modifies types, validate them against `.claude/evaluations/types-eval.md`.
+
+- Load `types-eval.md` and apply its criteria to any new or changed types in the PR.
+- Flag violations as findings with citations to `[evaluations/types-eval.md → Section Name]`.
+
+---
+
+# STEP 3 — Validate Tests
+
+If the PR introduces or modifies tests, validate them against `.claude/evaluations/tests-eval.md`.
+
+- Load `tests-eval.md` and apply its criteria to any new or changed tests in the PR.
+- Flag violations as findings with citations to `[evaluations/tests-eval.md → Section Name]`.
+
+---
+
 # OUTPUT FORMAT
 
 ---
@@ -139,3 +188,9 @@ Rules:
 - Do NOT tell me what is good, only flag violations and uncertainties
 - Be DIRECT and SHORT on each point
 - If no violations found, say "No violations found" — do not invent issues
+
+---
+
+## Before Finishing
+
+Check TaskList. If any task is not `completed`, do not finish — address remaining tasks or explain to user why they were skipped.

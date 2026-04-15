@@ -1,3 +1,5 @@
+<!-- SYNC:START — managed by ai-reference, do not edit below this line -->
+
 # AI Repo Template
 
 ## Tech Stack
@@ -33,51 +35,51 @@ Just do it. No skills or commands needed.
 
 ### New feature
 
-Always start with **Creator** to build context and align on architecture:
+Always start with **Architect** to build context and align on architecture:
 
 ```
-Creator (context + architecture) → /plan-feature (discovery + plan) → /efficient-orchestrator (execution) → /architecture-review
+Architect (context + architecture) → /plan-feature (discovery + plan) → /orchestrator (execution) → /architecture-review
 ```
 
-1. **Creator** — load `.claude/creator/SKILL.md`, describe what you want to build. Creator advises on architecture, identifies patterns, aligns on approach.
+1. **Architect** — load `.claude/skills/architect/SKILL.md`, describe what you want to build. Architect advises on architecture, identifies patterns, aligns on approach.
 2. **`/plan-feature`** — run with the agreed scope. Produces discovery doc + implementation plan + orchestration checklist in `tasks/`. Each phase requires your approval. Does NOT write code.
-3. **`/efficient-orchestrator`** — takes the approved orchestration file and executes: types first, parallel waves via subagents, structured testing, cleanup + commit.
+3. **`/orchestrator`** — takes the approved orchestration file and executes: types first, parallel waves via subagents, structured testing, cleanup + commit.
 4. **`/architecture-review`** — run on your branch before merging. Reports violations with citations to pattern files.
 
 ### Summary
 
-| Situation             | Flow                                                                           |
-| --------------------- | ------------------------------------------------------------------------------ |
-| New feature           | Creator → `/plan-feature` → `/efficient-orchestrator` → `/architecture-review` |
-| Small fix / bug       | Just code it                                                                   |
-| PR review only        | `/architecture-review`                                                         |
-| Architecture question | Creator (Mentor mode)                                                          |
-| Resuming execution    | Load `tasks/{name}-orchestration.md`, run `/efficient-orchestrator`            |
+| Situation             | Flow                                                                    |
+| --------------------- | ----------------------------------------------------------------------- |
+| New feature           | Architect → `/plan-feature` → `/orchestrator` → `/architecture-review`  |
+| Small fix / bug       | Just code it                                                            |
+| PR review only        | `/architecture-review`                                                  |
+| Architecture question | Architect (Mentor mode)                                                 |
+| Resuming execution    | Load `tasks/{date}/{date}-{name}-orchestration.md`, run `/orchestrator` |
 
 ## AI Skills
 
-### Creator
+### Architect
 
 Expert mentor and build orchestrator for generative AI applications. Two modes:
 
 - **Mentor** — teaches and advises grounded in the knowledge base. Use when you need architecture guidance.
 - **Builder** — plans and scaffolds new agents, skills, tools. Use when you need to design AI-specific components.
 
-Files: `.claude/creator/SKILL.md`, `.claude/creator/REFERENCE.md`
+Files: `.claude/skills/architect/SKILL.md`, `.claude/skills/architect/REFERENCE.md`
 
 ### Plan Feature
 
-Feature discovery and planning. Explores the codebase, writes discovery doc, implementation plan, and orchestration file in `tasks/`. Does NOT execute code — produces approved documents for the efficient-orchestrator.
+Feature discovery and planning. Explores the codebase, writes discovery doc, implementation plan, and orchestration file in `tasks/`. Does NOT execute code — produces approved documents for the orchestrator.
 
-File: `.claude/plan-feature/SKILL.md`
+File: `.claude/skills/plan-feature/SKILL.md`
 
-### Efficient Orchestrator
+### Orchestrator
 
 Implementation executor. Takes an approved orchestration file, defines types first, executes in dependency waves via subagents, runs structured testing, delivers + cleans up.
 
 Pipeline: PARSE → TASKS GATE → TYPES → WAVES → TEST → DELIVER → CLEANUP
 
-File: `.claude/efficient-orchestrator/SKILL.md`
+File: `.claude/skills/orchestrator/SKILL.md`
 
 ## Commands
 
@@ -113,3 +115,9 @@ PR architecture review. Loads relevant pattern files for touched layers, reports
 | `tsc`      | `yarn tsc`      | Type check           |
 | `format`   | `yarn format`   | Format with Prettier |
 | `test`     | `yarn test`     | Run tests            |
+
+<!-- SYNC:END — managed by ai-reference, do not edit above this line -->
+
+## Project-Specific Instructions
+
+<!-- Add project-specific conventions, custom rules, and feature notes below. This section is never overwritten by the sync script. -->

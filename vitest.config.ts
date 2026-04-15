@@ -7,6 +7,10 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     globals: true,
     passWithNoTests: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'text-summary'],
+    },
   },
   resolve: {
     alias: {

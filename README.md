@@ -25,26 +25,27 @@ yarn dev
 - **Global Drawer & Dialog** via context hooks (`useDrawer()`, `useDialog()`)
 - **Route groups** — `(public)` and `(protected)` layouts ready to go
 - **AppProvider** — composite provider pattern (add your providers in one place)
+- **Evaluation criteria** in `.claude/evaluations/` — validation checklists for types, tests, and architecture used by pipeline gates
 
 ## How to build a new feature
 
 Every new feature goes through a 4-step pipeline. Each step is a separate skill with a single responsibility:
 
-| Step | Skill                     | What it does                                                                   | Writes code?                |
-| ---- | ------------------------- | ------------------------------------------------------------------------------ | --------------------------- |
-| 1    | `/creator`                | Builds context, advises on architecture, aligns on approach                    | No                          |
-| 2    | `/plan-feature`           | Discovers codebase, writes implementation plan + orchestration file            | No — produces `tasks/` docs |
-| 3    | `/efficient-orchestrator` | Executes the approved plan: types first, parallel waves via subagents, testing | Yes — via subagents         |
-| 4    | `/architecture-review`    | Reviews the PR against coding pattern files                                    | No                          |
+| Step | Skill                  | What it does                                                                    | Writes code?                |
+| ---- | ---------------------- | ------------------------------------------------------------------------------- | --------------------------- |
+| 1    | `/architect`           | Builds context, advises on architecture, aligns on approach (master controller) | No                          |
+| 2    | `/plan-feature`        | Discovers codebase, writes implementation plan + orchestration file             | No — produces `tasks/` docs |
+| 3    | `/orchestrator`        | Executes the approved plan: types first, parallel waves via subagents, testing  | Yes — via subagents         |
+| 4    | `/architecture-review` | Reviews the PR against coding pattern files                                     | No                          |
 
 ```
-/creator → /plan-feature → /efficient-orchestrator → /architecture-review
+/architect → /plan-feature → /orchestrator → /architecture-review
 ```
 
-### Step 1: `/creator` — build context
+### Step 1: `/architect` — build context
 
 ```
-/creator
+/architect
 
 I want to build [feature name] for [project name].
 
@@ -72,12 +73,12 @@ Produces three documents in `tasks/`, each requiring your approval:
 2. **Implementation plan** — architecture decisions, file-level details
 3. **Orchestration file** — step-by-step execution checklist with dependencies
 
-### Step 3: `/efficient-orchestrator` — execution
+### Step 3: `/orchestrator` — execution
 
 ```
-/efficient-orchestrator
+/orchestrator
 
-Execute: tasks/{feature-name}-orchestration.md
+Execute: tasks/{date}/{date}-{feature-name}-orchestration.md
 ```
 
 Parses steps into dependency waves, defines types first, executes via subagents, runs structured testing, cleans up and commits.
@@ -88,13 +89,13 @@ Run `/architecture-review` on your branch before merging.
 
 ### Quick reference
 
-| Situation             | Flow                                                                              |
-| --------------------- | --------------------------------------------------------------------------------- |
-| New feature           | `/creator` → `/plan-feature` → `/efficient-orchestrator` → `/architecture-review` |
-| Small fix / bug       | Just code it                                                                      |
-| PR review only        | `/architecture-review`                                                            |
-| Architecture question | `/creator`                                                                        |
-| Resuming execution    | `/efficient-orchestrator` → point to `tasks/{name}-orchestration.md`              |
+| Situation             | Flow                                                                      |
+| --------------------- | ------------------------------------------------------------------------- |
+| New feature           | `/architect` → `/plan-feature` → `/orchestrator` → `/architecture-review` |
+| Small fix / bug       | Just code it                                                              |
+| PR review only        | `/architecture-review`                                                    |
+| Architecture question | `/architect`                                                              |
+| Resuming execution    | `/orchestrator` → point to `tasks/{date}/{date}-{name}-orchestration.md`  |
 
 ## Tips
 
@@ -107,7 +108,27 @@ Run `/architecture-review` on your branch before merging.
 **Resume via orchestration file.** It persists between conversations:
 
 ```
-/efficient-orchestrator
+/orchestrator
 
-Continue executing: tasks/{feature-name}-orchestration.md
+Continue executing: tasks/{date}/{date}-{feature-name}-orchestration.md
 ```
+
+**CLAUDE.md structure:** The file has `SYNC:START/END` markers. Content above the markers is synced from the reference repo. Add your project-specific instructions below `SYNC:END` — they are never overwritten.
+
+## Self-Updating AI Layer
+
+This template repo is the upstream reference. Projects copied from it auto-sync the AI layer (skills, patterns, evaluations, knowledge base) on `yarn dev`.
+
+**Setup (one-time):**
+
+```bash
+git remote add ai-reference https://github.com/{org}/ai-repo-template.git
+```
+
+**How it works:**
+
+- `yarn dev` runs `scripts/sync-ai-reference.ts` before starting Next.js
+- Syncs `.claude/skills/`, `.claude/patterns/`, `.claude/evaluations/`, `.claude/commands/`, `knowladge/`, `docs/repo-structure.md`
+- `CLAUDE.md` uses sync markers — managed section auto-updates, your project-specific section stays untouched
+- Fails gracefully if offline or remote not configured
+- Manual sync: `yarn sync-ai`

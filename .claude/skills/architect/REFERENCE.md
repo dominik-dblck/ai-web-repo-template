@@ -1,4 +1,4 @@
-# Creator — Design Principles & Review Checklist
+# Architect — Design Principles & Review Checklist
 
 Full reference extracted from knowledge base mind maps (S01E01–S01E05, S02E01–S02E05, S03E01–S03E05, S04E01–S04E05, S05E01–S05E05). Load on demand when reviewing, planning, or needing detailed guidance.
 

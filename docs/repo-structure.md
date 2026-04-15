@@ -23,27 +23,22 @@ This document explains how the project is organized. Use it as a reference when 
 ```
 {project}/
 ├── .claude/                        # AI knowledge base & skills
-│   ├── creator/                    # Creator skill (mentor + builder)
-│   │   ├── SKILL.md                # Skill definition & workflow
-│   │   └── REFERENCE.md           # Design principles cheat sheet + review checklist
-│   ├── efficient-orchestrator/     # Implementation orchestrator skill
-│   │   └── SKILL.md               # Pipeline: PARSE → TASKS GATE → TYPES → WAVES → TEST → DELIVER → CLEANUP
-│   ├── mindmaps/                   # Condensed knowledge base (25 mind maps)
-│   │   ├── S01/                    # Prompts, tools, API design, multimodal, production limits
-│   │   ├── S02/                    # Context mgmt, RAG, memory, multi-agent, agent design
-│   │   ├── S03/                    # Observability, model limits, feedback, tool building, behavior
-│   │   ├── S04/                    # Deployments, collaboration, background tasks, KB design, internal AI
-│   │   └── S05/                    # Architecture, toolset, features, production, master controller
-│   ├── original_source/            # Full theory articles (deep reading on demand)
-│   │   ├── S01/                    # Season 1 original articles
-│   │   ├── S02/                    # Season 2 original articles
-│   │   ├── S03/                    # Season 3 original articles
-│   │   ├── S04/                    # Season 4 original articles
-│   │   └── S05/                    # Season 5 original articles
-│   ├── commands/                   # Claude Code slash commands
-│   │   └── architecture-review.md  # /architecture-review — PR architecture review
-│   ├── plan-feature/               # Plan Feature skill (discovery + planning)
-│   │   └── SKILL.md               # Produces tasks/ docs, does NOT execute code
+│   ├── skills/                     # Skill definitions
+│   │   ├── architect/              # Architect skill (master controller + mentor)
+│   │   │   ├── SKILL.md            # Skill definition & workflow (compact, ~430 lines)
+│   │   │   ├── KNOWLEDGE-INDEX.md  # Knowledge base reference tables (tier 2)
+│   │   │   ├── PLANNING-CHECKLISTS.md # Creation checklists by type (tier 2)
+│   │   │   └── REFERENCE.md        # Design principles + review checklist (tier 3)
+│   │   ├── orchestrator/           # Orchestrator skill
+│   │   │   └── SKILL.md            # Pipeline: PARSE → TASKS GATE → TYPES → WAVES → TEST → DELIVER → CLEANUP
+│   │   └── plan-feature/           # Plan Feature skill (discovery + planning)
+│   │       └── SKILL.md            # Produces tasks/ docs, does NOT execute code
+│   ├── evaluations/                # Validation criteria for pipeline gates
+│   │   ├── types-eval.md           # Type safety checklist
+│   │   ├── tests-eval.md           # Test quality checklist
+│   │   └── architecture-eval.md    # Architecture conformance checklist
+│   ├── commands/                    # Claude Code slash commands
+│   │   └── architecture-review.md   # /architecture-review — PR architecture review
 │   ├── patterns/                   # Architecture pattern guides (referenced by commands)
 │   │   ├── api-clients.md         # HTTP client layering, service rules
 │   │   ├── cookies-auth.md        # Cookie-based auth, CSRF, session management
@@ -114,14 +109,31 @@ This document explains how the project is organized. Use it as a reference when 
 │   ├── types/                      # Zod schemas + TS types ({feature}Types.ts)
 │   └── utils/                      # Utility functions ({verbNoun}.ts)
 │
+├── knowladge/                      # Knowledge base (synced from reference)
+│   └── ai/                         # AI & Agent Design domain
+│       ├── mindmaps/               # Condensed mind maps (25 files)
+│       │   ├── S01/                # Prompts, tools, API design, multimodal, production limits
+│       │   ├── S02/                # Context mgmt, RAG, memory, multi-agent, agent design
+│       │   ├── S03/                # Observability, model limits, feedback, tool building, behavior
+│       │   ├── S04/                # Deployments, collaboration, background tasks, KB design, internal AI
+│       │   └── S05/                # Architecture, toolset, features, production, master controller
+│       └── original_source/        # Full theory articles (deep reading on demand)
+│           ├── S01/ ... S05/
+│
 ├── docs/                           # Project documentation
-│   └── repo-structure.md           # This file — conventions reference
+│   ├── repo-structure.md           # This file — conventions reference
+│   └── app-architecture.md         # Living architecture doc (architect maintains)
 ├── plans/                          # Implementation plans (by date)
 ├── tasks/                          # Feature discovery, implementation & orchestration docs
+│   └── {DD-MM-YYYY}/              # Date-based folders (e.g., 15-04-2026/)
+│       ├── {date}-{name}-discovery.md
+│       ├── {date}-{name}-implementation.md
+│       └── {date}-{name}-orchestration.md
 ├── scripts/                        # CLI scripts (run via tsx)
+│   └── sync-ai-reference.ts        # AI layer sync from reference repo (runs on yarn dev)
 ├── __tests__/                      # Unit tests
 │
-├── CLAUDE.md                       # Root AI instructions (tech stack, conventions, skills)
+├── CLAUDE.md                       # Root AI instructions (with SYNC:START/END markers)
 ├── eslint.config.js                # ESLint flat config (TS + React + React Hooks)
 ├── next.config.ts                  # Next.js configuration
 ├── tsconfig.json                   # TypeScript strict config (bundler, @/* alias)

@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "tsx scripts/sync-ai-reference.ts",
     "dev": "next dev",
+    "sync-ai": "tsx scripts/sync-ai-reference.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -50,6 +52,7 @@
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.1",
+    "@vitest/coverage-v8": "^4.1.4",
     "vitest": "^4.1.4"
   }
 }

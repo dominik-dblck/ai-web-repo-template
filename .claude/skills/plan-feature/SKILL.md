@@ -1,9 +1,36 @@
 ---
 name: plan-feature
-description: Feature discovery and planning — explores the codebase, writes discovery doc, implementation plan, and orchestration file in tasks/. Does NOT execute code — produces approved documents for the efficient-orchestrator.
+description: Feature discovery and planning — explores the codebase, writes discovery doc, implementation plan, and orchestration file in tasks/. Does NOT execute code — produces approved documents for the orchestrator.
 ---
 
-Discover and plan a new feature. This skill does NOT execute code — it produces approved documents that the efficient-orchestrator uses for implementation.
+## MANDATORY FIRST ACTION — CREATE TASKS NOW
+
+Before reading ANYTHING below, create these tasks using TaskCreate:
+
+1. "Load repo-structure.md + app-architecture.md"
+2. "Identify relevant patterns + knowledge base sections"
+3. "Search codebase for existing implementations"
+4. "Ask clarifying questions (single batch)"
+5. "Write discovery doc"
+6. "Return discovery to architect for DESIGN VALIDATION (Level 1 — mindmaps)"
+7. "User review of validated discovery"
+8. "Load patterns + explore references"
+9. "Write implementation plan"
+10. "Return plan to architect for PLAN VALIDATION (Level 2 — patterns/structure)"
+11. "User review of validated plan"
+12. "Write orchestration file"
+13. "User review of orchestration file"
+14. "Hand off complete"
+
+If TaskCreate is unavailable, write the task list as a markdown checklist in your first message instead.
+
+If you have not created tasks, STOP. Go back and create them.
+
+Mark each task `in_progress` when you begin it. Mark it `completed` when done.
+
+---
+
+Discover and plan a new feature. This skill does NOT execute code — it produces approved documents that the orchestrator uses for implementation.
 
 **User-provided context:** $ARGUMENTS
 
@@ -16,14 +43,14 @@ This is a multi-phase command. Each phase produces a persistent markdown documen
 **Full workflow:**
 
 ```
-/creator (context + architecture) → /plan-feature (discovery + plan) → /efficient-orchestrator (execution) → /architecture-review
+/architect (context + architecture) → /plan-feature (discovery + plan) → /orchestrator (execution) → /architecture-review
 ```
 
 ---
 
 ## Pattern Loading Strategy
 
-**Always load `docs/repo-structure.md` first** — it applies to every plan.
+**Always load `docs/repo-structure.md` and `docs/app-architecture.md` first** — they apply to every plan.
 
 **Then load patterns selectively** based on what the feature touches:
 
@@ -80,7 +107,7 @@ Launch parallel explorations for all identified gaps:
 
 ### Step 4 — Write discovery document
 
-Write `tasks/{feature-name}-discovery.md` covering:
+Write `tasks/{DD-MM-YYYY}/{DD-MM-YYYY}-{feature-name}-discovery.md` covering:
 
 - Feature overview and motivation
 - What exists today (reusable code, patterns)
@@ -91,11 +118,15 @@ Write `tasks/{feature-name}-discovery.md` covering:
 - Dependencies and blockers
 - Open questions
 
-### Step 5 — User review
+### Step 5 — Design validation (Level 1)
 
-Wait for user to review and correct the discovery doc before proceeding.
+Return the discovery doc to the architect for **Level 1 design validation** — architecture decisions checked against knowledge base mindmaps (loaded selectively from KNOWLEDGE-INDEX.md at `.claude/skills/architect/KNOWLEDGE-INDEX.md`) + REFERENCE.md. Validation must cite sources. Format: `[S02E01 §3 — Context Management]`, `[REFERENCE.md — Design Principles]`. No citation = source was not checked.
 
-**Output:** `tasks/{feature-name}-discovery.md`
+### Step 6 — User review
+
+Wait for user to review and correct the validated discovery doc before proceeding.
+
+**Output:** `tasks/{DD-MM-YYYY}/{DD-MM-YYYY}-{feature-name}-discovery.md`
 
 ---
 
@@ -117,7 +148,7 @@ Goal: Create a detailed, ordered implementation plan with clear steps.
 
 ### Step 2 — Write implementation plan
 
-Write `tasks/{feature-name}-implementation.md` with:
+Write `tasks/{DD-MM-YYYY}/{DD-MM-YYYY}-{feature-name}-implementation.md` with:
 
 - Architecture decisions and rationale
 - Technical approach for each area
@@ -127,15 +158,19 @@ Write `tasks/{feature-name}-implementation.md` with:
 
 This is the **reference document** — it describes what to build and why.
 
-### Step 3 — User review of implementation plan
+### Step 3 — Plan validation (Level 2)
 
-Wait for user to review and approve the implementation plan before creating the orchestration file. The user may adjust scope, reorder steps, or change technical decisions.
+Return the implementation plan to the architect for **Level 2 plan validation** — file placement, naming, patterns, and architecture-eval.md. The validator checks against `docs/repo-structure.md`, relevant `.claude/patterns/` files, and `.claude/evaluations/architecture-eval.md`. Validation must cite sources. Format: `[patterns/mui7.md — Token Safety]`, `[repo-structure.md — Services]`. No citation = source was not checked.
 
-**Output:** `tasks/{feature-name}-implementation.md` (approved)
+### Step 4 — User review of implementation plan
 
-### Step 4 — Write orchestration file
+Wait for user to review and approve the validated implementation plan before creating the orchestration file. The user may adjust scope, reorder steps, or change technical decisions.
 
-After the implementation plan is approved, write `tasks/{feature-name}-orchestration.md` — the **execution contract** for the efficient-orchestrator. This is a sequential checklist derived from the approved implementation plan:
+**Output:** `tasks/{DD-MM-YYYY}/{DD-MM-YYYY}-{feature-name}-implementation.md` (approved)
+
+### Step 5 — Write orchestration file
+
+After the implementation plan is approved, write `tasks/{DD-MM-YYYY}/{DD-MM-YYYY}-{feature-name}-orchestration.md` — the **execution contract** for the orchestrator. This is a sequential checklist derived from the approved implementation plan:
 
 ```markdown
 # {Feature Name} — Orchestration
@@ -161,11 +196,11 @@ After the implementation plan is approved, write `tasks/{feature-name}-orchestra
 
 Each step must be atomic and verifiable. Include `Depends on` for steps that can't run in parallel — the orchestrator uses this to group waves.
 
-### Step 5 — User review of orchestration file
+### Step 6 — User review of orchestration file
 
 Wait for user to review the orchestration file before handing off to execution.
 
-**Output:** `tasks/{feature-name}-orchestration.md` (approved)
+**Output:** `tasks/{DD-MM-YYYY}/{DD-MM-YYYY}-{feature-name}-orchestration.md` (approved)
 
 ---
 
@@ -174,9 +209,9 @@ Wait for user to review the orchestration file before handing off to execution.
 Tell the user:
 
 > The discovery, implementation plan, and orchestration file are approved. Ready to execute.
-> Run `/efficient-orchestrator` — it will read `tasks/{feature-name}-orchestration.md` and execute the steps.
+> Run `/orchestrator` — it will read `tasks/{DD-MM-YYYY}/{DD-MM-YYYY}-{feature-name}-orchestration.md` and execute the steps.
 
-**This command is done.** Execution is the efficient-orchestrator's responsibility.
+**This command is done.** Execution is the orchestrator's responsibility.
 
 ---
 
@@ -186,5 +221,11 @@ The orchestration file persists between conversations. If you need to resume:
 
 ```
 I'm continuing work on [feature]. The orchestration file is at
-tasks/{feature-name}-orchestration.md — please read it and continue.
+tasks/{DD-MM-YYYY}/{DD-MM-YYYY}-{feature-name}-orchestration.md — please read it and continue.
 ```
+
+---
+
+## Before Finishing
+
+Check TaskList. If any task is not `completed`, do not finish — address remaining tasks or explain to user why they were skipped.

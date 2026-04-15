@@ -190,8 +190,8 @@ yarn dev`}</CodeBlock>
 
           <StepCard
             step="Build context"
-            command="/creator"
-            code={`/creator
+            command="/architect"
+            code={`/architect
 
 I want to build [feature name] for [project name].
 
@@ -215,8 +215,8 @@ Constraints:
 
           <StepCard
             step="Execution"
-            command="/efficient-orchestrator"
-            code={`/efficient-orchestrator
+            command="/orchestrator"
+            code={`/orchestrator
 
 Execute: tasks/{feature-name}-orchestration.md`}
             description="Parses steps into dependency waves, defines types first, executes via subagents, runs structured testing, cleans up and commits."
@@ -254,7 +254,7 @@ Execute: tasks/{feature-name}-orchestration.md`}
             <Typography variant="subtitle2" sx={{ mb: 1 }}>
               Resume from a previous session
             </Typography>
-            <CodeBlock>{`/efficient-orchestrator
+            <CodeBlock>{`/orchestrator
 
 Continue executing: tasks/{feature-name}-orchestration.md`}</CodeBlock>
           </Box>
@@ -1665,7 +1665,7 @@ export default function Home() {
                   <TableRow>
                     <TableCell>1</TableCell>
                     <TableCell>
-                      <Chip label="/creator" size="small" />
+                      <Chip label="/architect" size="small" />
                     </TableCell>
                     <TableCell>
                       Builds context, advises on architecture, aligns on
@@ -1685,7 +1685,7 @@ export default function Home() {
                   <TableRow>
                     <TableCell>3</TableCell>
                     <TableCell>
-                      <Chip label="/efficient-orchestrator" size="small" />
+                      <Chip label="/orchestrator" size="small" />
                     </TableCell>
                     <TableCell>
                       Executes the plan: types first, parallel waves via
