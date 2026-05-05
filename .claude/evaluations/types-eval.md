@@ -10,12 +10,13 @@ Before validating, create a task for EACH criterion using TaskCreate:
 2. "Check: no type casting unless justified"
 3. "Check: no @ts-ignore or @ts-expect-error"
 4. "Check: all params and return types explicitly typed"
-5. "Check: Zod schemas for all external data"
-6. "Check: types inferred from Zod (z.infer)"
-7. "Check: no optional where always present"
-8. "Check: union types over boolean flags"
-9. "Check: enums as const objects or Zod enums"
-10. "Check: yarn tsc — zero errors"
+5. "Check: no optional where always present"
+6. "Check: union types over boolean flags"
+7. "Check: no bare string/number when narrower type exists"
+8. "Check: discriminated unions over optional fields"
+9. "Check: readonly where data is immutable"
+10. "Check: Record<SpecificKey> not Record<string> when keys known"
+11. "Check: yarn tsc — zero errors"
 
 If TaskCreate is unavailable, write the task list as a markdown checklist in your first message instead.
 
@@ -29,9 +30,10 @@ Mark each task `in_progress` when checking, `completed` when verified. Cite sour
 - No type casting (`as`, `<Type>`) unless explicitly justified with a comment
 - No `@ts-ignore` or `@ts-expect-error`
 - All function parameters and return types explicitly typed
-- Zod schemas defined for all external data (API responses, form inputs)
-- TS types inferred from Zod (`z.infer<>`) — no duplicate manual types
 - No optional properties (`?`) where the value is always present
 - Union types over boolean flags where applicable
-- Enums as `const` objects or Zod enums, not TS `enum`
+- No bare `string` or `number` when a narrower type exists — use string literals, unions, or branded types
+- Discriminated unions over optional fields — `{ type: 'error'; message: string } | { type: 'success'; data: T }` not `{ type?: string; data?: T }`
+- `readonly` where data should not be mutated
+- `Record<SpecificKey, Value>` not `Record<string, Value>` when keys are known
 - `yarn tsc` — zero errors

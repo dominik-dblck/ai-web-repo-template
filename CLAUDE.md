@@ -33,68 +33,121 @@ Key conventions:
 
 Just do it. No skills or commands needed.
 
-### New feature
+### New feature — 10-Skill Pipeline
 
-Always start with **Architect** to build context and align on architecture:
+Every feature goes through a create → gate → create → gate pipeline. Each skill has single responsibility and hands off to next. Entire pipeline runs in one conversation — all skills share full context.
 
 ```
-Architect (context + architecture) → /plan-feature (discovery + plan) → /orchestrator (execution) → /architecture-review
+/architect → /brainstorm → /plan-discovery → /architect-evaluate-discovery
+  → /plan-implementation → /architect-evaluate-plan
+    → /plan-orchestration → /orchestrator-plan-review
+      → /orchestrator → /architecture-review
 ```
 
-1. **Architect** — load `.claude/skills/architect/SKILL.md`, describe what you want to build. Architect advises on architecture, identifies patterns, aligns on approach.
-2. **`/plan-feature`** — run with the agreed scope. Produces discovery doc + implementation plan + orchestration checklist in `tasks/`. Each phase requires your approval. Does NOT write code.
-3. **`/orchestrator`** — takes the approved orchestration file and executes: types first, parallel waves via subagents, structured testing, cleanup + commit.
-4. **`/architecture-review`** — run on your branch before merging. Reports violations with citations to pattern files.
+| #   | Skill                           | Type     | What it does                                        | Writes code? |
+| --- | ------------------------------- | -------- | --------------------------------------------------- | ------------ |
+| 1   | `/architect`                    | Advisor  | Loads context, advises on architecture, hands off   | No           |
+| 2   | `/brainstorm`                   | Creator  | Structured divergent thinking, options matrix       | No — doc     |
+| 3   | `/plan-discovery`               | Creator  | Explores codebase, writes discovery doc             | No — doc     |
+| 4   | `/architect-evaluate-discovery` | Gate     | Evaluates discovery against KB + web search         | No — verdict |
+| 5   | `/plan-implementation`          | Creator  | Writes implementation plan (types, features, tests) | No — doc     |
+| 6   | `/architect-evaluate-plan`      | Gate     | Evaluates plan against KB + patterns + web search   | No — verdict |
+| 7   | `/plan-orchestration`           | Creator  | Converts plan into step-by-step orchestration file  | No — doc     |
+| 8   | `/orchestrator-plan-review`     | Gate     | Reviews orchestration for coverage + buildability   | No — verdict |
+| 9   | `/orchestrator`                 | Executor | Executes orchestration: types first, waves, testing | Yes          |
+| 10  | `/architecture-review`          | Gate     | Reviews implemented code against patterns + evals   | No           |
+
+### Weekly Roadmap Flow
+
+All execution artifacts live under `roadmaps/`. Template: `roadmaps/templates/week-roadmap.md`.
+
+```
+roadmaps/
+├── templates/
+│   └── week-roadmap.md
+└── {ISO-week}/
+    ├── {week}-week-roadmap.md              ← priority stack, schedule, gates
+    ├── {week}-learnings.md                 ← findings from the week
+    └── plans/
+        └── {week}-{feature}/               ← one folder per feature
+            ├── {week}-{feature}-orchestration.md
+            └── tasks/
+                ├── {week}-{feature}-discovery.md
+                └── {week}-{feature}-implementation.md
+```
+
+Weekly cadence:
+
+- **Monday:** create `{week}-week-roadmap.md` from template + previous week's next-steps
+- **Per feature:** full 10-skill pipeline
+- **Friday:** retrospective → `{week}-learnings.md`
 
 ### Summary
 
-| Situation             | Flow                                                                    |
-| --------------------- | ----------------------------------------------------------------------- |
-| New feature           | Architect → `/plan-feature` → `/orchestrator` → `/architecture-review`  |
-| Small fix / bug       | Just code it                                                            |
-| PR review only        | `/architecture-review`                                                  |
-| Architecture question | Architect (Mentor mode)                                                 |
-| Resuming execution    | Load `tasks/{date}/{date}-{name}-orchestration.md`, run `/orchestrator` |
+| Situation                      | Flow                                         |
+| ------------------------------ | -------------------------------------------- |
+| New feature                    | Full 10-skill pipeline                       |
+| New feature (obvious approach) | Skip `/brainstorm` → 9-skill pipeline        |
+| Small fix / bug                | Just code it                                 |
+| PR review only                 | `/architecture-review`                       |
+| Architecture question          | `/architect` (mentor mode)                   |
+| Resuming execution             | Load orchestration file, run `/orchestrator` |
 
 ## AI Skills
 
-### Architect
+### Pipeline Skills
 
-Expert mentor and build orchestrator for generative AI applications. Two modes:
+**Advisor:**
 
-- **Mentor** — teaches and advises grounded in the knowledge base. Use when you need architecture guidance.
-- **Builder** — plans and scaffolds new agents, skills, tools. Use when you need to design AI-specific components.
+- **`/architect`** — Architecture advisor. Mentor mode for Q&A, Builder mode advises and hands off. Files: `.claude/skills/architect/SKILL.md`, `REFERENCE.md`
 
-Files: `.claude/skills/architect/SKILL.md`, `.claude/skills/architect/REFERENCE.md`
+**Creators (produce docs, no code):**
 
-### Plan Feature
+- **`/brainstorm`** — Structured divergent thinking, options matrix + trade-off analysis
+- **`/plan-discovery`** — Explores codebase, writes discovery doc
+- **`/plan-implementation`** — Writes implementation plan from approved discovery
+- **`/plan-orchestration`** — Converts plan into step-by-step orchestration file
 
-Feature discovery and planning. Explores the codebase, writes discovery doc, implementation plan, and orchestration file in `tasks/`. Does NOT execute code — produces approved documents for the orchestrator.
+**Gates (evaluate docs, no code):**
 
-File: `.claude/skills/plan-feature/SKILL.md`
+- **`/architect-evaluate-discovery`** — Evaluates discovery against KB + web search
+- **`/architect-evaluate-plan`** — Evaluates plan against KB + patterns + web search
+- **`/orchestrator-plan-review`** — Reviews orchestration for coverage + buildability
+- **`/architecture-review`** — Reviews implemented code against patterns + evals
 
-### Orchestrator
+**Executor:**
 
-Implementation executor. Takes an approved orchestration file, defines types first, executes in dependency waves via subagents, runs structured testing, delivers + cleans up.
+- **`/orchestrator`** — Executes orchestration: types first, dependency waves, structured testing
 
-Pipeline: PARSE → TASKS GATE → TYPES → WAVES → TEST → DELIVER → CLEANUP
+### Evaluation Templates
 
-File: `.claude/skills/orchestrator/SKILL.md`
+Gate skills use eval templates from `.claude/evaluations/`:
 
-## Commands
+| Template                 | Used by                         |
+| ------------------------ | ------------------------------- |
+| `discovery-eval.md`      | `/architect-evaluate-discovery` |
+| `plan-eval.md`           | `/architect-evaluate-plan`      |
+| `orchestration-eval.md`  | `/orchestrator-plan-review`     |
+| `web-search-protocol.md` | Both architect-evaluate skills  |
+| `architecture-eval.md`   | `/architecture-review`          |
+| `tests-eval.md`          | `/architecture-review`          |
+| `types-eval.md`          | `/architecture-review`          |
 
-### `/architecture-review`
+### Legacy Skills
 
-PR architecture review. Loads relevant pattern files for touched layers, reports violations with source citations.
+- **`/plan-feature`** — Combined discovery + planning (pre-pipeline). Use 10-skill pipeline instead for new work.
 
 ## Reference
 
-| What                | Where                                                                                                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------ |
-| Project conventions | `docs/repo-structure.md`                                                                               |
-| Coding patterns     | `.claude/patterns/` (11 files: MUI, Next.js, TanStack Query, state, services, testing, security, etc.) |
-| Knowledge base      | `knowladge/ai/mindmaps/` (25 mind maps), `knowladge/ai/original_source/` (full articles)               |
-| Feature docs        | `tasks/` (discovery, implementation, orchestration per feature)                                        |
+| What                | Where                                                                                                    |
+| ------------------- | -------------------------------------------------------------------------------------------------------- |
+| Project conventions | `docs/repo-structure.md`                                                                                 |
+| App architecture    | `docs/app-architecture.md`                                                                               |
+| Coding patterns     | `.claude/patterns/` (11 files: MUI, Next.js, TanStack Query, state, services, testing, security, etc.)   |
+| Eval templates      | `.claude/evaluations/` (7 files: discovery, plan, orchestration, architecture, tests, types, web search) |
+| Knowledge base      | `knowladge/ai/mindmaps/` (25 mind maps), `knowladge/ai/original_source/` (full articles)                 |
+| Roadmap template    | `roadmaps/templates/week-roadmap.md`                                                                     |
+| Feature artifacts   | `roadmaps/{ISO-week}/plans/{week}-{feature}/` (discovery, implementation, orchestration)                 |
 
 ## Getting Started
 

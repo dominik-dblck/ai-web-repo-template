@@ -23,20 +23,29 @@ This document explains how the project is organized. Use it as a reference when 
 ```
 {project}/
 ├── .claude/                        # AI knowledge base & skills
-│   ├── skills/                     # Skill definitions
-│   │   ├── architect/              # Architect skill (master controller + mentor)
-│   │   │   ├── SKILL.md            # Skill definition & workflow (compact, ~430 lines)
-│   │   │   ├── KNOWLEDGE-INDEX.md  # Knowledge base reference tables (tier 2)
-│   │   │   ├── PLANNING-CHECKLISTS.md # Creation checklists by type (tier 2)
-│   │   │   └── REFERENCE.md        # Design principles + review checklist (tier 3)
-│   │   ├── orchestrator/           # Orchestrator skill
-│   │   │   └── SKILL.md            # Pipeline: PARSE → TASKS GATE → TYPES → WAVES → TEST → DELIVER → CLEANUP
-│   │   └── plan-feature/           # Plan Feature skill (discovery + planning)
-│   │       └── SKILL.md            # Produces tasks/ docs, does NOT execute code
+│   ├── skills/                     # 10-skill pipeline (create → gate pattern)
+│   │   ├── architect/              # #1 Advisor — context + architecture
+│   │   │   ├── SKILL.md            # Skill definition & workflow
+│   │   │   ├── KNOWLEDGE-INDEX.md  # Knowledge base reference tables
+│   │   │   ├── PLANNING-CHECKLISTS.md # Creation checklists by type
+│   │   │   └── REFERENCE.md        # Design principles + review checklist
+│   │   ├── brainstorm/             # #2 Creator — divergent thinking, options matrix
+│   │   ├── plan-discovery/         # #3 Creator — codebase exploration, discovery doc
+│   │   ├── architect-evaluate-discovery/ # #4 Gate — evaluates discovery vs KB
+│   │   ├── plan-implementation/    # #5 Creator — implementation plan
+│   │   ├── architect-evaluate-plan/ # #6 Gate — evaluates plan vs KB + patterns
+│   │   ├── plan-orchestration/     # #7 Creator — orchestration file
+│   │   ├── orchestrator-plan-review/ # #8 Gate — reviews orchestration
+│   │   ├── orchestrator/           # #9 Executor — types first, waves, testing
+│   │   └── plan-feature/           # Legacy — combined discovery + planning
 │   ├── evaluations/                # Validation criteria for pipeline gates
-│   │   ├── types-eval.md           # Type safety checklist
-│   │   ├── tests-eval.md           # Test quality checklist
-│   │   └── architecture-eval.md    # Architecture conformance checklist
+│   │   ├── discovery-eval.md       # KB criteria + web search criteria
+│   │   ├── plan-eval.md            # KB + pattern + structural + web search
+│   │   ├── orchestration-eval.md   # Coverage + dependency + buildability
+│   │   ├── web-search-protocol.md  # 4-phase structured web search process
+│   │   ├── architecture-eval.md    # Code structure criteria
+│   │   ├── tests-eval.md           # Test quality criteria
+│   │   └── types-eval.md           # Type safety criteria
 │   ├── commands/                    # Claude Code slash commands
 │   │   └── architecture-review.md   # /architecture-review — PR architecture review
 │   ├── patterns/                   # Architecture pattern guides (referenced by commands)
@@ -123,12 +132,19 @@ This document explains how the project is organized. Use it as a reference when 
 ├── docs/                           # Project documentation
 │   ├── repo-structure.md           # This file — conventions reference
 │   └── app-architecture.md         # Living architecture doc (architect maintains)
-├── plans/                          # Implementation plans (by date)
-├── tasks/                          # Feature discovery, implementation & orchestration docs
-│   └── {DD-MM-YYYY}/              # Date-based folders (e.g., 15-04-2026/)
-│       ├── {date}-{name}-discovery.md
-│       ├── {date}-{name}-implementation.md
-│       └── {date}-{name}-orchestration.md
+├── roadmaps/                       # Execution artifacts (weekly roadmaps + feature plans)
+│   ├── backlog.md                  # Week-agnostic prioritized backlog
+│   ├── templates/
+│   │   └── week-roadmap.md         # Weekly roadmap template
+│   └── {ISO-week}/                 # e.g., 2026-W19/
+│       ├── {week}-week-roadmap.md  # Priority stack, schedule, gates
+│       ├── {week}-learnings.md     # Findings from the week
+│       └── plans/
+│           └── {week}-{feature}/   # One folder per feature
+│               ├── {week}-{feature}-orchestration.md
+│               └── tasks/
+│                   ├── {week}-{feature}-discovery.md
+│                   └── {week}-{feature}-implementation.md
 ├── scripts/                        # CLI scripts (run via tsx)
 │   └── sync-ai-reference.ts        # AI layer sync from reference repo (runs on yarn dev)
 ├── __tests__/                      # Unit tests
