@@ -120,11 +120,13 @@ File-level design for every new/modified file. Per file:
 
 - **Path** — exact location following `repo-structure.md`
 - **Purpose** — one sentence
-- **Pattern** — which `.claude/patterns/` it follows, with citation: `[patterns/api-clients.md → Service Pattern]`
+- **Pattern** — which `.claude/patterns/` it follows, with citation: `[patterns/api-clients.md → Service Pattern]`. If no pattern file is applicable (e.g., scripts/validation layer), cite the codebase reference file instead: `[follows enrichHandlerPattern.ts pattern]`
 - **Imports** — concrete: "imports `SessionFilter` from `app/types/session.ts`", not "will use session types"
 - **Exports** — what file provides to others
 - **Integration points** — how connects to existing code
 - **Server/client** — for Next.js app code, declare server or client. Verify no non-serializable data crosses boundary (functions, promises, Date objects). For scripts/, N/A. Follow `[patterns/nextjs-app-router.md → Server/Client Boundary]`
+
+**File size and SRP constraint:** each file should be max ~200 lines, one function/check per file, single responsibility principle. If a planned file would exceed this, split into focused sub-files. Each file should do one thing well — atomic functions over monolithic modules.
 
 Verify no circular import chains — if File A imports from File B and vice versa, restructure.
 

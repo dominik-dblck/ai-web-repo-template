@@ -133,10 +133,6 @@ Gate skills use eval templates from `.claude/evaluations/`:
 | `tests-eval.md`          | `/architecture-review`          |
 | `types-eval.md`          | `/architecture-review`          |
 
-### Legacy Skills
-
-- **`/plan-feature`** — Combined discovery + planning (pre-pipeline). Use 10-skill pipeline instead for new work.
-
 ## Reference
 
 | What                | Where                                                                                                    |

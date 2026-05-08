@@ -23,9 +23,10 @@ Before evaluating, create a task for EACH criterion using TaskCreate:
 15. "Check: constants split into frontend vs backend"
 16. "Check: edge cases and error handling strategy defined per component"
 17. "Check: external dependencies identified — BE changes, API contracts, third-party services"
-18. "Web search: are chosen libraries/APIs current and maintained?"
-19. "Web search: known issues with the specific tech choices?"
-20. "Web search: better alternatives available?"
+18. "Check: files are atomic — max ~200 lines per file, split if larger"
+19. "Web search: are chosen libraries/APIs current and maintained?"
+20. "Web search: known issues with the specific tech choices?"
+21. "Web search: better alternatives available?"
 
 Mark each task `in_progress` when checking, `completed` when verified.
 Cite source for each: `[plan-eval.md → {criterion}]`.
@@ -51,12 +52,15 @@ Cite source for each: `[plan-eval.md → {criterion}]`.
 - Constants split into frontend vs backend (`frontendApiConstants.ts` / `backendApiConstants.ts`) `[architecture-eval.md → constants]`
 - Edge cases and error handling strategy defined per component — not just happy path `[S01E05 §1 — Error recovery]`
 - External dependencies identified — BE changes, API contracts, third-party services `[S02E01 §10 — Context gaps]`
+- Files are atomic — max ~200 lines per file, one function/check per file, single responsibility principle. If a planned file exceeds this, split into focused sub-files. Each file should do one thing well. `[SRP — atomic files]`
 
 ## Web Search Criteria
 
 - Are chosen libraries/APIs current and maintained? — search for each library/tool in the plan `[web: cite source]`
 - Known issues with the specific tech choices? — search for "{library} problems OR breaking changes {year}" `[web: cite source]`
 - Better alternatives available? — search for "{library} vs OR alternatives" `[web: cite source]`
+
+**N/A shortcut:** When plan introduces no new libraries or packages (all changes use existing codebase patterns), state "Web search N/A — no new dependencies" and skip. No need to explain per-criterion.
 
 ## Sources to Load
 
