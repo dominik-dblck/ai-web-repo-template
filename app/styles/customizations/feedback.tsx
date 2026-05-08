@@ -47,7 +47,6 @@ const severityColors: Record<string, SeverityColor> = {
 
 const alertVariants = Object.entries(severityColors).flatMap(
   ([severity, c]) => [
-    // Standard — light tinted background
     {
       props: { severity, variant: 'standard' as const },
       style: {
@@ -56,7 +55,6 @@ const alertVariants = Object.entries(severityColors).flatMap(
         '& .MuiAlert-icon': { color: c[500] },
       },
     },
-    // Outlined — transparent background, colored border
     {
       props: { severity, variant: 'outlined' as const },
       style: {
@@ -65,7 +63,6 @@ const alertVariants = Object.entries(severityColors).flatMap(
         '& .MuiAlert-icon': { color: c[500] },
       },
     },
-    // Filled — solid colored background, white text
     {
       props: { severity, variant: 'filled' as const },
       style: {
@@ -86,7 +83,6 @@ export const feedbackCustomizations: Components<Theme> = {
         color: (theme.vars || theme).palette.text.primary,
         variants: [
           ...alertVariants,
-          // Dark mode adjustments for standard variant
           ...Object.entries(severityColors).map(([severity, c]) => ({
             props: { severity, variant: 'standard' as const },
             style: theme.applyStyles('dark', {
@@ -94,7 +90,6 @@ export const feedbackCustomizations: Components<Theme> = {
               border: `1px solid ${alpha(c[800], 0.5)}`,
             }),
           })),
-          // Dark mode adjustments for outlined variant
           ...Object.entries(severityColors).map(([severity, c]) => ({
             props: { severity, variant: 'outlined' as const },
             style: theme.applyStyles('dark', {
@@ -102,7 +97,6 @@ export const feedbackCustomizations: Components<Theme> = {
               border: `1px solid ${alpha(c[500], 0.5)}`,
             }),
           })),
-          // Dark mode adjustments for filled variant
           ...Object.entries(severityColors).map(([severity, c]) => ({
             props: { severity, variant: 'filled' as const },
             style: theme.applyStyles('dark', {
@@ -130,9 +124,7 @@ export const feedbackCustomizations: Components<Theme> = {
         height: 8,
         borderRadius: 8,
         backgroundColor: gray[200],
-        ...theme.applyStyles('dark', {
-          backgroundColor: gray[800],
-        }),
+        ...theme.applyStyles('dark', { backgroundColor: gray[800] }),
       }),
     },
   },

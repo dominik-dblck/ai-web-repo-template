@@ -19,11 +19,12 @@ Define how the project uses App Router with clear server/client boundaries, pred
 - Keep data/network logic in `app/services/*` (or feature-local services).
 - Keep reusable behaviors in `app/hooks/*` (or feature-local hooks).
 
-## Route Groups
+## Auth & Route Groups
 
-- Use parenthesized route groups (`(public)`, `(protected)`) for layout boundaries — they don't affect URLs.
-- Each group has its own `layout.tsx` controlling providers, guards, and navigation.
-- Root `layout.tsx` wraps everything with `AppProvider`.
+- Auth enforced at provider level (`AuthProvider`). All routes protected by default.
+- `AuthGuard` renders `LoginForm` inline when unauthenticated — no separate login route.
+- Route groups (`(feature)`) available for layout boundaries only, not auth gating.
+- Root `layout.tsx` wraps everything with `AppProvider` (which includes `AuthProvider`).
 
 ## Component Boundary Pattern
 

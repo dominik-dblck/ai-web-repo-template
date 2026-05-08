@@ -14,12 +14,8 @@ export const surfacesCustomizations: Components<Theme> = {
         backgroundColor: (theme.vars || theme).palette.background.default,
         border: '1px solid',
         borderColor: (theme.vars || theme).palette.divider,
-        ':before': {
-          backgroundColor: 'transparent',
-        },
-        '&:not(:last-of-type)': {
-          borderBottom: 'none',
-        },
+        ':before': { backgroundColor: 'transparent' },
+        '&:not(:last-of-type)': { borderBottom: 'none' },
         '&:first-of-type': {
           borderTopLeftRadius: (theme.vars || theme).shape.borderRadius,
           borderTopRightRadius: (theme.vars || theme).shape.borderRadius,
@@ -50,9 +46,7 @@ export const surfacesCustomizations: Components<Theme> = {
     },
   },
   MuiPaper: {
-    defaultProps: {
-      elevation: 0,
-    },
+    defaultProps: { elevation: 0 },
   },
   MuiCard: {
     styleOverrides: {
@@ -65,14 +59,10 @@ export const surfacesCustomizations: Components<Theme> = {
           borderRadius: (theme.vars || theme).shape.borderRadius,
           border: `1px solid ${(theme.vars || theme).palette.divider}`,
           boxShadow: 'none',
-          ...theme.applyStyles('dark', {
-            backgroundColor: gray[800],
-          }),
+          ...theme.applyStyles('dark', { backgroundColor: gray[800] }),
           variants: [
             {
-              props: {
-                variant: 'outlined',
-              },
+              props: { variant: 'outlined' },
               style: {
                 border: `1px solid ${(theme.vars || theme).palette.divider}`,
                 boxShadow: 'none',
@@ -89,24 +79,13 @@ export const surfacesCustomizations: Components<Theme> = {
   },
   MuiCardContent: {
     styleOverrides: {
-      root: {
-        padding: 0,
-        '&:last-child': { paddingBottom: 0 },
-      },
+      root: { padding: 0, '&:last-child': { paddingBottom: 0 } },
     },
   },
   MuiCardHeader: {
-    styleOverrides: {
-      root: {
-        padding: 0,
-      },
-    },
+    styleOverrides: { root: { padding: 0 } },
   },
   MuiCardActions: {
-    styleOverrides: {
-      root: {
-        padding: 0,
-      },
-    },
+    styleOverrides: { root: { padding: 0 } },
   },
 };

@@ -70,16 +70,12 @@ This document explains how the project is organized. Use it as a reference when 
 │   ├── page.tsx                    # Home page (or redirect)
 │   ├── globals.css                 # Global styles / CSS reset
 │   │
-│   ├── (public)/                   # Route group: public pages (no auth required)
-│   │   ├── layout.tsx              # Public layout (minimal providers)
-│   │   └── login/page.tsx          # Example public route
-│   │
-│   ├── (protected)/                # Route group: authenticated pages
-│   │   ├── layout.tsx              # Protected layout (auth guard, full nav)
-│   │   ├── dashboard/page.tsx      # Example protected route
-│   │   └── settings/page.tsx       # Example protected route
+│   ├── dashboard/page.tsx           # Dashboard page
+│   ├── settings/page.tsx           # Settings page
 │   │
 │   ├── api/                        # Backend API routes
+│   │   ├── auth/[...nextauth]/     # NextAuth catch-all route handler
+│   │   │   └── route.ts            # Re-exports GET, POST from auth.ts
 │   │   └── {feature}/              # One folder per endpoint
 │   │       ├── route.ts            # Thin re-export of HTTP methods
 │   │       └── {action}Route.ts    # Handler logic (GET/POST/PUT/DELETE)
@@ -109,6 +105,7 @@ This document explains how the project is organized. Use it as a reference when 
 │   │   ├── AppProvider/            # Composite provider (nests all others)
 │   │   │   ├── AppProvider.tsx     # Provider composition tree
 │   │   │   └── index.ts           # Re-export
+│   │   ├── AuthProvider.tsx         # NextAuth SessionProvider + AuthGuard
 │   │   ├── QueryClientProvider.tsx # TanStack React Query client
 │   │   └── ThemeProvider.tsx       # MUI ThemeProvider + CssBaseline
 │   ├── queries/                    # TanStack Query hooks (use{Feature}Query.tsx)
@@ -149,6 +146,8 @@ This document explains how the project is organized. Use it as a reference when 
 │   └── sync-ai-reference.ts        # AI layer sync from reference repo (runs on yarn dev)
 ├── __tests__/                      # Unit tests
 │
+├── auth.ts                         # NextAuth v5 config (providers, callbacks, session)
+├── .env.example                    # Required environment variables
 ├── CLAUDE.md                       # Root AI instructions (with SYNC:START/END markers)
 ├── eslint.config.js                # ESLint flat config (TS + React + React Hooks)
 ├── next.config.ts                  # Next.js configuration
@@ -443,6 +442,7 @@ providers/
   AppProvider/                      # composite provider (folder-based)
     AppProvider.tsx                  # nests all providers in order
     index.ts                        # re-export
+  AuthProvider.tsx                  # NextAuth SessionProvider + AuthGuard
   QueryClientProvider.tsx           # TanStack React Query client
   ThemeProvider.tsx                 # MUI theme + CssBaseline
   {Domain}Provider.tsx              # feature-specific providers (add as needed)
@@ -456,11 +456,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   return (
     <QueryClientProvider>
       <ThemeProvider>
-        {/* Add providers here as the app grows: */}
-        {/* <AuthProvider> */}
-        {/* <UserProvider> */}
-        {/* <NotificationProvider> */}
-        {children}
+        <NotificationProvider>
+          <DialogProvider>
+            <DrawerProvider>
+              <AuthProvider>{children}</AuthProvider>
+            </DrawerProvider>
+          </DialogProvider>
+        </NotificationProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
@@ -518,9 +520,11 @@ Use `useNotification()` hook to show toast notifications (notistack + MUI Alert)
 
 ---
 
-## Routes — Grouped Route Pattern
+## Routes — Auth-Protected by Default
 
-Routes use App Router **route groups** (`(public)`, `(protected)`) to share layouts without affecting the URL. Each group has its own `layout.tsx`. Root `layout.tsx` wraps everything with `AppProvider`.
+All routes are protected by default via `AuthProvider`. The `AuthGuard` component renders `LoginForm` when unauthenticated — no separate login route exists.
+
+Pages live flat under `app/` (e.g., `app/dashboard/page.tsx`). Route groups available for layout boundaries only, not auth gating.
 
 For App Router patterns, see `.claude/patterns/nextjs-app-router.md`.
 

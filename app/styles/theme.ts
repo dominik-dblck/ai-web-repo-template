@@ -1,7 +1,7 @@
 'use client';
 
-import { createTheme } from '@mui/material/styles';
-import { colorSchemes, typography, shadows, shape } from './themePrimitives';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
+import { getDesignTokens } from './themePrimitives';
 import {
   inputsCustomizations,
   dataDisplayCustomizations,
@@ -10,20 +10,20 @@ import {
   surfacesCustomizations,
 } from './customizations';
 
-export const theme = createTheme({
-  cssVariables: {
-    colorSchemeSelector: 'data-mui-color-scheme',
-    cssVarPrefix: 'template',
-  },
-  colorSchemes,
-  typography,
-  shadows,
-  shape,
-  components: {
-    ...inputsCustomizations,
-    ...dataDisplayCustomizations,
-    ...feedbackCustomizations,
-    ...navigationCustomizations,
-    ...surfacesCustomizations,
-  },
-});
+export function buildTheme(mode: 'light' | 'dark') {
+  return responsiveFontSizes(
+    createTheme({
+      ...getDesignTokens(mode),
+      components: {
+        ...inputsCustomizations,
+        ...dataDisplayCustomizations,
+        ...feedbackCustomizations,
+        ...navigationCustomizations,
+        ...surfacesCustomizations,
+      },
+    }),
+  );
+}
+
+const theme = buildTheme('light');
+export default theme;

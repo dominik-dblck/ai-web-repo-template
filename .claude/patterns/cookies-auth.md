@@ -4,6 +4,17 @@
 
 Standardize authentication around secure cookies and server-side session truth.
 
+## NextAuth v5 Implementation
+
+This project uses NextAuth v5 with JWT strategy and Google SSO:
+
+- **Config:** `auth.ts` at project root — exports `handlers`, `auth`, `signIn`, `signOut`
+- **Session strategy:** JWT in HttpOnly cookie (managed by NextAuth automatically)
+- **Client-side:** `SessionProvider` + `useSession()` from `next-auth/react`
+- **Server-side:** `auth()` from `@/auth` for Server Actions and route handlers
+- **Refresh:** `SessionProvider refetchInterval={300}` + `session.update()` on user activity (debounced 60s)
+- **Cookie security:** NextAuth v5 manages HttpOnly, Secure, SameSite automatically — do not set auth cookies manually
+
 ## Non-Negotiable Rules
 
 - Store auth and refresh tokens only in secure, HttpOnly cookies.

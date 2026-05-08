@@ -14,7 +14,9 @@ Define mandatory security defaults for the web application (frontend + App Route
 
 ### Auth and Session
 
-- Token material in secure HttpOnly cookies only.
+- Auth enforced via `AuthProvider` wrapping all app content. `AuthGuard` renders `LoginForm` when unauthenticated. All routes protected by default.
+- Token material in secure HttpOnly cookies only (NextAuth manages automatically).
+- Client-side `AuthGuard` protects UI only. Server Actions and API route handlers must call `auth()` from `@/auth` to verify session server-side.
 - Validate auth per protected route and subscription endpoint.
 - Rotate/refresh tokens server-side; clear compromised state on failures.
 

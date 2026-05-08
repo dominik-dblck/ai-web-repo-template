@@ -8,6 +8,7 @@ import { DrawerProvider } from '@/app/components/molecules/Drawer';
 import { Drawer } from '@/app/components/molecules/Drawer';
 import { DialogProvider } from '@/app/components/molecules/Dialog';
 import { Dialog } from '@/app/components/molecules/Dialog';
+import { AuthProvider } from '@/app/providers/AuthProvider';
 
 export const AppProvider = ({ children }: { children: ReactNode }) => {
   return (
@@ -16,11 +17,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         <NotificationProvider>
           <DialogProvider>
             <DrawerProvider>
-              {/* Add providers here as the app grows: */}
-              {/* <AuthProvider> */}
-              {children}
-              <Drawer />
-              <Dialog />
+              <AuthProvider>
+                {children}
+                <Drawer />
+                <Dialog />
+              </AuthProvider>
             </DrawerProvider>
           </DialogProvider>
         </NotificationProvider>

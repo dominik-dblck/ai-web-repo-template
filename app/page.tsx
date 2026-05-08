@@ -68,15 +68,16 @@ import TerminalRoundedIcon from '@mui/icons-material/TerminalRounded';
 import { useDrawer } from '@/app/components/molecules/Drawer';
 import { useDialog } from '@/app/components/molecules/Dialog';
 import { useNotification } from '@/app/providers/NotificationProvider';
+import { useColorMode } from './providers/ThemeProvider';
+import { signOut } from 'next-auth/react';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 function ThemeToggle() {
-  const { mode, setMode } = useColorScheme();
+  const { mode, toggleColorMode } = useColorMode();
+
   return (
     <Tooltip title={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}>
-      <IconButton
-        onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
-        color="inherit"
-      >
+      <IconButton onClick={toggleColorMode} size="small">
         {mode === 'dark' ? <LightModeRoundedIcon /> : <DarkModeRoundedIcon />}
       </IconButton>
     </Tooltip>
@@ -1635,6 +1636,11 @@ export default function Home() {
             <Chip label="Next.js 16" size="small" variant="outlined" />
             <Chip label="React 19" size="small" variant="outlined" />
             <ThemeToggle />
+            <Tooltip title="Sign out">
+              <IconButton onClick={() => signOut()} size="small">
+                <LogoutRoundedIcon />
+              </IconButton>
+            </Tooltip>
           </Stack>
         </Toolbar>
       </AppBar>

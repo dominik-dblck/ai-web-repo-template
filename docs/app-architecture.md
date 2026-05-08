@@ -67,10 +67,26 @@ Shared interfaces that multiple features depend on.
 
 ## 8. Infrastructure
 
+### Authentication
+
+- **Provider:** NextAuth v5 with Google SSO (`@deblock.com` domain restriction)
+- **Strategy:** JWT session in HttpOnly cookie, 1-hour maxAge
+- **Config:** `auth.ts` at project root
+- **Guard:** `AuthProvider` wraps entire app — all routes protected by default
+- **Session expiry:** `useSessionExpiry` hook monitors expiry with 30s warning countdown, auto-extends on user activity
+
+### Environment Variables
+
+| Variable             | Purpose                                              |
+| -------------------- | ---------------------------------------------------- |
+| `AUTH_URL`           | NextAuth base URL (e.g., `http://localhost:3000`)    |
+| `AUTH_SECRET`        | JWT signing secret (generate with `npx auth secret`) |
+| `AUTH_GOOGLE_ID`     | Google OAuth client ID                               |
+| `AUTH_GOOGLE_SECRET` | Google OAuth client secret                           |
+
 <!--
-Environment variables and their purpose.
 Deployment target and process.
-External services (auth, payments, monitoring, etc.)
+Additional external services (payments, monitoring, etc.)
 -->
 
 ## 9. Testing Strategy
